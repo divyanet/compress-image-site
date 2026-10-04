@@ -35,6 +35,15 @@ interface Props {
 
 const RASTER_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,image/bmp";
 
+/** File-picker filter per tool format: a PNG page only offers PNG files, etc. */
+const ACCEPT_BY_FORMAT: Record<OutputFormat, string> = {
+  jpeg: "image/jpeg,.jpg,.jpeg",
+  png: "image/png,.png",
+  webp: "image/webp,.webp",
+  gif: "image/gif,.gif",
+  svg: "image/svg+xml,.svg",
+};
+
 export function CompressTool({ format, targetKb, pageName }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState("");
@@ -46,7 +55,7 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const isSvg = format === "svg";
-  const accept = isSvg ? "image/svg+xml,.svg" : RASTER_ACCEPT;
+  const accept = format ? ACCEPT_BY_FORMAT[format] : RASTER_ACCEPT;
   const fmtLabel = format ? FORMAT_LABEL[format] : "image";
   const targetBytes = targetKb ? targetKb * 1024 : 0;
 
@@ -65,8 +74,15 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
         setDims({ w: 0, h: 0 });
       } else {
         const kind = await detectKind(f);
-        if (!["jpeg", "png", "webp", "gif", "bmp"].includes(kind)) {
-          throw new Error(messageForKind(kind));
+        const allowedKinds = format ? [format] : ["jpeg", "png", "webp", "gif", "bmp"];
+        if (!allowedKinds.includes(kind)) {
+          throw new Error(
+            format
+              ? `This tool works with ${FORMAT_LABEL[format]} files only. Please choose a .${
+                  format === "jpeg" ? "jpg" : format
+                } file.`
+              : messageForKind(kind)
+          );
         }
         const img = await loadImage(f);
         checkPixelBudget(img.naturalWidth, img.naturalHeight);
