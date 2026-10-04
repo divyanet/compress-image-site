@@ -1,6 +1,5 @@
 import { CompressTool } from "@/components/CompressTool";
 import { ToolsDirectory } from "@/components/ToolsDirectory";
-import { StarRating } from "@/components/StarRating";
 import { AdSlot } from "@/components/AdSlot";
 import { FaqSection } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
@@ -89,9 +88,6 @@ export default function Home() {
                 { label: "JPG to WebP", href: "/jpg-to-webp/" },
               ]}
             />
-          </div>
-          <div className="mt-4">
-            <StarRating />
           </div>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
             {TRUST.map((t) => (

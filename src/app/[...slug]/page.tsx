@@ -4,7 +4,6 @@ import { PAGE_MAP, PAGES, type PageDef } from "@/lib/slugs";
 import { contentFor } from "@/lib/content";
 import { SITE, siteUrl } from "@/lib/site";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
-import { StarRating } from "@/components/StarRating";
 import { AdSlot } from "@/components/AdSlot";
 import { FaqSection } from "@/components/Faq";
 import { JsonLd } from "@/components/JsonLd";
@@ -156,7 +155,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
     applicationCategory: "MultimediaApplication",
     operatingSystem: "Any",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "2400" },
   };
 
   const breadcrumbJsonLd = {
@@ -191,9 +189,6 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-slate-600">{c.intro}</p>
             <div className="mt-6 rounded-[28px] border border-slate-200 bg-white p-4 text-left shadow-xl shadow-blue-600/5 md:p-6">
               <ToolWidget page={page} />
-            </div>
-            <div className="mt-4">
-              <StarRating />
             </div>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
               {["100% free", "No signup", "Private — no uploads"].map((t) => (
