@@ -14,6 +14,8 @@ import {
 
 interface Props {
   targetKb: number | null;
+  /** iLoveIMG-style chaining shown on the result screen. */
+  nextTools?: { label: string; href: string }[];
 }
 
 interface PdfOutcome {
@@ -47,7 +49,7 @@ async function optimizePdf(file: File, onStep: (m: string) => void): Promise<Blo
   return new Blob([bytes.buffer as ArrayBuffer], { type: "application/pdf" });
 }
 
-export function PdfTool({ targetKb }: Props) {
+export function PdfTool({ targetKb, nextTools }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState("");
   const [outcome, setOutcome] = useState<PdfOutcome | null>(null);
@@ -156,6 +158,7 @@ export function PdfTool({ targetKb }: Props) {
           ]}
           note={outcome.note}
           onReset={reset}
+          nextTools={nextTools}
         />
       )}
     </div>

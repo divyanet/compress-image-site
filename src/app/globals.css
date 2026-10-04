@@ -1,4 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 
 html {
   scroll-behavior: smooth;
@@ -7,4 +12,59 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+/* Slim styled range sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #2563eb var(--fill, 50%), #e2e8f0 var(--fill, 50%));
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+}
+input[type="range"]::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+}
+
+/* Accordion groups in the tool directory */
+details.tool-group > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details.tool-group > summary::-webkit-details-marker {
+  display: none;
+}
+details.tool-group > summary .chev {
+  transition: transform 0.2s ease;
+}
+details.tool-group[open] > summary .chev {
+  transform: rotate(180deg);
+}
+
+/* Subtle dotted texture for hero */
+.dot-grid {
+  background-image: radial-gradient(#bfdbfe 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
 }

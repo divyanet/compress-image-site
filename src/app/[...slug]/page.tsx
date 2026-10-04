@@ -65,24 +65,67 @@ const CONV_TO: Record<string, ImageFormat> = {
 };
 
 function ToolWidget({ page }: { page: PageDef }) {
+  const resizeNext = [
+    { label: "Compress image", href: "/compress-image/" },
+    { label: "JPG to WebP", href: "/jpg-to-webp/" },
+  ];
   switch (page.kind) {
     case "size":
     case "reduce":
-    case "hub":
-      return <CompressTool format={page.format} targetKb={page.targetKb} pageName={page.name} />;
+    case "hub": {
+      const next =
+        page.format === "svg"
+          ? [{ label: "Resize image", href: "/resize-image/" }]
+          : [
+              { label: "Resize image", href: "/resize-image/" },
+              { label: "JPG to WebP", href: "/jpg-to-webp/" },
+            ];
+      return (
+        <CompressTool
+          format={page.format}
+          targetKb={page.targetKb}
+          pageName={page.name}
+          sample={{ url: "/samples/sample-1.jpg", name: "sample-photo.jpg" }}
+          nextTools={next}
+        />
+      );
+    }
     case "resize": {
       const preset = RESIZE_PRESETS[page.slug];
-      return <ResizeTool pageName={page.name} presetLabel={preset?.label} presetW={preset?.w} presetH={preset?.h} />;
+      return (
+        <ResizeTool
+          pageName={page.name}
+          presetLabel={preset?.label}
+          presetW={preset?.w}
+          presetH={preset?.h}
+          nextTools={resizeNext}
+        />
+      );
     }
     case "converter": {
       const m = page.name.match(/^(.*) to (.*)$/);
       const from = m ? m[1] : "Image";
       const toLabel = m ? m[2] : "JPG";
       const toFormat = CONV_TO[toLabel] ?? "jpeg";
-      return <ConverterTool fromLabel={from} toFormat={toFormat} toLabel={toLabel} />;
+      return (
+        <ConverterTool
+          fromLabel={from}
+          toFormat={toFormat}
+          toLabel={toLabel}
+          nextTools={[
+            { label: "Compress image", href: "/compress-image/" },
+            { label: "Resize image", href: "/resize-image/" },
+          ]}
+        />
+      );
     }
     case "pdf":
-      return <PdfTool targetKb={page.targetKb} />;
+      return (
+        <PdfTool
+          targetKb={page.targetKb}
+          nextTools={[{ label: "Resize image", href: "/resize-image/" }]}
+        />
+      );
     default:
       return <CompressTool format={page.format} targetKb={page.targetKb} pageName={page.name} />;
   }
@@ -127,81 +170,113 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4">
-      <div className="pt-6">
-        <Breadcrumbs
-          trail={[
-            { label: "Home", href: "/" },
-            { label: page.category, href: `/${page.slug.split("/")[0]}/` },
-            { label: c.h1 },
-          ]}
-        />
+    <div>
+      <div className="dot-grid border-b border-slate-100 bg-gradient-to-b from-blue-50/70 via-white to-white">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="pt-5">
+            <Breadcrumbs
+              trail={[
+                { label: "Home", href: "/" },
+                { label: page.category, href: `/${page.slug.split("/")[0]}/` },
+                { label: c.h1 },
+              ]}
+            />
+          </div>
+
+          {/* Tool-first hero */}
+          <section className="pb-10 pt-6 text-center">
+            <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
+              {c.h1}
+            </h1>
+            <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-slate-600">{c.intro}</p>
+            <div className="mt-6 rounded-[28px] border border-slate-200 bg-white p-4 text-left shadow-xl shadow-blue-600/5 md:p-6">
+              <ToolWidget page={page} />
+            </div>
+            <div className="mt-4">
+              <StarRating />
+            </div>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              {["100% free", "No signup", "Private — no uploads"].map((t) => (
+                <span
+                  key={t}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200"
+                >
+                  <svg className="h-3.5 w-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                  {t}
+                </span>
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
 
-      {/* Tool-first hero (iLoveIMG style) */}
-      <section className="pb-8 pt-6 text-center">
-        <h1 className="text-3xl font-black tracking-tight text-slate-900 md:text-4xl">{c.h1}</h1>
-        <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-slate-600">{c.intro}</p>
-        <div className="mt-6 rounded-3xl border border-slate-200 bg-white p-4 text-left shadow-sm md:p-6">
-          <ToolWidget page={page} />
-        </div>
-        <div className="mt-4">
-          <StarRating />
-        </div>
-      </section>
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <AdSlot slot="tool-mid" />
 
-      <AdSlot slot="tool-mid" />
+        {/* Content body */}
+        <div className="space-y-12 py-10">
+          <section>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">{c.freeTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.freeBody}</p>
+          </section>
 
-      {/* Cloudinary Content body */}
-      <div className="space-y-10 pb-14">
-        <section>
-          <h2 className="text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">{c.freeTitle}</h2>
-          <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.freeBody}</p>
-        </section>
-
-        <section>
-          <h2 className="text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">{c.whyTitle}</h2>
-          <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.whyBody}</p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {c.cards.map((card) => (
-              <div key={card.title} className="rounded-2xl border border-slate-200 bg-white p-5">
-                <h3 className="text-[15px] font-bold text-slate-900">{card.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
-                  <RichText text={card.body} />
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <AdSlot slot="tool-content" />
-
-        <section>
-          <h2 className="text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">{c.howTitle}</h2>
-          <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.howIntro}</p>
-          <ol className="mt-5 space-y-4">
-            {c.steps.map((s, i) => (
-              <li key={s.title} className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
-                  {i + 1}
-                </span>
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">{s.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.body}</p>
+          <section>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">{c.whyTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.whyBody}</p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {c.cards.map((card, i) => (
+                <div
+                  key={card.title}
+                  className="rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5"
+                >
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white ${
+                      ["bg-blue-600", "bg-violet-600", "bg-emerald-600", "bg-amber-600", "bg-rose-600", "bg-cyan-600"][i % 6]
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {i + 1}
+                  </span>
+                  <h3 className="mt-3 text-[15px] font-bold text-slate-900">{card.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
+                    <RichText text={card.body} />
+                  </p>
                 </div>
-              </li>
-            ))}
-          </ol>
-        </section>
+              ))}
+            </div>
+          </section>
 
-        <section>
-          <h2 className="text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">
-            Frequently asked questions
-          </h2>
-          <div className="mt-5">
-            <FaqSection faqs={c.faqs} />
-          </div>
-        </section>
+          <AdSlot slot="tool-content" />
+
+          <section>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">{c.howTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.howIntro}</p>
+            <ol className="mt-6 space-y-3">
+              {c.steps.map((s, i) => (
+                <li key={s.title} className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="text-[15px] font-bold text-slate-900">{s.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-black tracking-tight text-slate-900">
+              Frequently asked questions
+            </h2>
+            <div className="mt-6">
+              <FaqSection faqs={c.faqs} />
+            </div>
+          </section>
+        </div>
       </div>
 
       <JsonLd data={webAppJsonLd} />

@@ -31,6 +31,10 @@ interface Props {
   /** Exact KB target. null = hub mode (quality slider). */
   targetKb: number | null;
   pageName: string;
+  /** Squoosh-style demo: one-click sample image when the user has no file handy. */
+  sample?: { url: string; name: string };
+  /** iLoveIMG-style chaining shown on the result screen. */
+  nextTools?: { label: string; href: string }[];
 }
 
 const RASTER_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,image/bmp";
@@ -44,7 +48,7 @@ const ACCEPT_BY_FORMAT: Record<OutputFormat, string> = {
   svg: "image/svg+xml,.svg",
 };
 
-export function CompressTool({ format, targetKb, pageName }: Props) {
+export function CompressTool({ format, targetKb, pageName, sample, nextTools }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState("");
   const [dims, setDims] = useState({ w: 0, h: 0 });
@@ -53,6 +57,7 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
   const [working, setWorking] = useState(false);
   const [log, setLog] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [sampleLoading, setSampleLoading] = useState(false);
 
   const isSvg = format === "svg";
   const accept = format ? ACCEPT_BY_FORMAT[format] : RASTER_ACCEPT;
@@ -137,6 +142,22 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
   const resultFormat: OutputFormat = format ?? "jpeg";
 
   if (!file) {
+    const loadSample = async () => {
+      if (!sample || sampleLoading) return;
+      setSampleLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(sample.url);
+        if (!res.ok) throw new Error("Couldn't load the sample image.");
+        const blob = await res.blob();
+        const f = new File([blob], sample.name, { type: blob.type || "image/jpeg" });
+        await onFiles([f]);
+      } catch {
+        setError("Couldn't load the sample image. Please try uploading your own file.");
+      } finally {
+        setSampleLoading(false);
+      }
+    };
     return (
       <div>
         <UploadDrop
@@ -149,6 +170,23 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
               : `or drag and drop your ${fmtLabel} files`
           }
         />
+        {sample && (
+          <button
+            type="button"
+            onClick={loadSample}
+            disabled={sampleLoading}
+            className="mx-auto mt-4 flex items-center gap-2.5 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-600 transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-60"
+          >
+            {sampleLoading ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" aria-hidden="true" />
+            ) : (
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.5-4.5a1.5 1.5 0 012 0L16 17m-2-2l1.5-1.5a1.5 1.5 0 012 0L20 16M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            )}
+            {sampleLoading ? "Loading sample…" : "No image handy? Try a sample image"}
+          </button>
+        )}
         {error && (
           <div className="mt-4">
             <ToolError message={error} onDismiss={() => setError(null)} />
@@ -186,7 +224,8 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
             max={99}
             value={quality}
             onChange={(e) => setQuality(Number(e.target.value))}
-            className="mt-3 w-full accent-blue-600"
+            className="mt-3 w-full"
+            style={{ "--fill": `${quality}%` } as React.CSSProperties}
           />
           <p className="mt-2 text-xs text-slate-500">Lower quality = smaller file. 80% is a good balance for most images.</p>
         </div>
@@ -252,6 +291,7 @@ export function CompressTool({ format, targetKb, pageName }: Props) {
           ]}
           note={outcome.note || (targetKb && outcome.reached ? `Done — your file is ${formatBytes(outcome.result.sizeBytes)}, at or under the ${targetKb}KB target.` : "")}
           onReset={reset}
+          nextTools={nextTools}
         />
       )}
     </div>

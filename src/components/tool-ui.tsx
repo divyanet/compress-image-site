@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import { formatBytes, type ProcessedImage } from "@/lib/image";
 
@@ -246,6 +247,8 @@ interface ResultViewProps {
   stats?: ResultStat[];
   note?: string;
   onReset: () => void;
+  /** iLoveIMG-style chaining: "Continue with → Resize / Convert…" */
+  nextTools?: { label: string; href: string }[];
 }
 
 export function ResultView({
@@ -259,6 +262,7 @@ export function ResultView({
   stats = [],
   note,
   onReset,
+  nextTools = [],
 }: ResultViewProps) {
   const reduction =
     originalSize > 0 ? Math.max(0, ((originalSize - result.sizeBytes) / originalSize) * 100) : 0;
@@ -360,6 +364,28 @@ export function ResultView({
             Process another
           </button>
         </div>
+
+        {nextTools.length > 0 && (
+          <div className="mt-5 border-t border-slate-100 pt-5">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
+              Continue with
+            </p>
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {nextTools.map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700 transition-colors hover:bg-blue-600 hover:text-white"
+                >
+                  {t.label}
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

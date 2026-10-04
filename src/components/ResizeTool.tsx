@@ -26,11 +26,13 @@ interface Props {
   presetLabel?: string;
   presetW?: number;
   presetH?: number;
+  /** iLoveIMG-style chaining shown on the result screen. */
+  nextTools?: { label: string; href: string }[];
 }
 
 type Mode = "width" | "height" | "percent" | "dimensions";
 
-export function ResizeTool({ pageName, presetLabel, presetW, presetH }: Props) {
+export function ResizeTool({ pageName, presetLabel, presetW, presetH, nextTools }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState("");
   const [dims, setDims] = useState({ w: 0, h: 0 });
@@ -209,6 +211,7 @@ export function ResizeTool({ pageName, presetLabel, presetW, presetH }: Props) {
             { label: "Size", value: formatBytes(outcome.sizeBytes) },
           ]}
           onReset={reset}
+          nextTools={nextTools}
         />
       )}
     </div>

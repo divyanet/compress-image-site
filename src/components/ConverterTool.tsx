@@ -23,6 +23,8 @@ interface Props {
   fromLabel: string;
   toFormat: ImageFormat;
   toLabel: string;
+  /** iLoveIMG-style chaining shown on the result screen. */
+  nextTools?: { label: string; href: string }[];
 }
 
 const DECODABLE = ["jpeg", "png", "webp", "gif", "bmp", "avif"];
@@ -32,7 +34,7 @@ const HONEST_BLOCKS: Record<string, string> = {
   tiff: "TIFF files can't be opened directly by web browsers, so this browser-based converter can't read them. Export your image as JPG or PNG from your editor first, then convert it here.",
 };
 
-export function ConverterTool({ fromLabel, toFormat, toLabel }: Props) {
+export function ConverterTool({ fromLabel, toFormat, toLabel, nextTools }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState("");
   const [dims, setDims] = useState({ w: 0, h: 0 });
@@ -135,6 +137,7 @@ export function ConverterTool({ fromLabel, toFormat, toLabel }: Props) {
             { label: "Size", value: formatBytes(outcome.sizeBytes) },
           ]}
           onReset={reset}
+          nextTools={nextTools}
         />
       )}
     </div>
