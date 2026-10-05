@@ -10,7 +10,7 @@ export function RichText({ text, className = "" }: { text: string; className?: s
         const m = part.match(/^\[\[(.*?)\|(.*)\]\]$/);
         if (m) {
           return (
-            <Link key={i} href={`/${m[1]}/`} className="font-medium text-#e5322d hover:underline">
+            <Link key={i} href={`/${m[1]}/`} className="font-medium text-[#e5322d] hover:underline">
               {m[2]}
             </Link>
           );

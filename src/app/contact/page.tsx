@@ -14,7 +14,7 @@ export default function Contact() {
         <p className="text-sm font-semibold text-slate-700">Email us at</p>
         <a
           href={`mailto:${SITE.contactEmail}`}
-          className="mt-1 inline-block text-lg font-bold text-#e5322d hover:underline"
+          className="mt-1 inline-block text-lg font-bold text-[#e5322d] hover:underline"
         >
           {SITE.contactEmail}
         </a>
