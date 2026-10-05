@@ -57,8 +57,8 @@ export default function Home() {
           </h2>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {WHY.map((c) => (
-              <div key={c.t} className="tool-card rounded-xl border border-[#e5e5ea] bg-white p-7">
-                <span className="flex h-12 w-12 items-center justify-center text-[#e5322d]">
+              <div key={c.t} className="tool-card rounded-xl border border-[#e5e5ea] bg-white p-7 text-center">
+                <span className="mx-auto flex h-12 w-12 items-center justify-center text-[#e5322d]">
                   <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d={c.icon} />
                   </svg>

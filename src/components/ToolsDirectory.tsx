@@ -67,12 +67,12 @@ function ToolCard({
   return (
     <Link
       href={href}
-      className="tool-card flex flex-col rounded-xl border border-[#e5e5ea] bg-white p-6"
+      className="tool-card flex flex-col items-center rounded-xl border border-[#e5e5ea] bg-white p-6 text-center"
     >
       <span className="flex h-12 w-12 items-center justify-center text-[#e5322d]" aria-hidden="true">
         <Icon d={icon} />
       </span>
-      <span className="mt-3 flex items-center gap-2">
+      <span className="mt-3 flex items-center justify-center gap-2">
         <span className="text-[17px] font-bold text-[#383e45]">{title}</span>
         {badge && (
           <span className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-[#e5322d]">
