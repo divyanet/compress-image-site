@@ -26,7 +26,7 @@ export default function Privacy() {
         <h2 className="pt-2 text-lg font-bold text-slate-900">Contact</h2>
         <p>
           Questions about privacy? Email us at{" "}
-          <a className="text-blue-600 hover:underline" href={`mailto:${SITE.contactEmail}`}>
+          <a className="text-#e5322d hover:underline" href={`mailto:${SITE.contactEmail}`}>
             {SITE.contactEmail}
           </a>
           .

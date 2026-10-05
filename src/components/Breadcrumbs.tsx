@@ -8,7 +8,7 @@ export function Breadcrumbs({ trail }: { trail: { label: string; href?: string }
           <li key={i} className="flex items-center gap-1.5">
             {i > 0 && <span aria-hidden="true">/</span>}
             {t.href ? (
-              <Link href={t.href} className="hover:text-blue-600 hover:underline">
+              <Link href={t.href} className="hover:text-#e5322d hover:underline">
                 {t.label}
               </Link>
             ) : (

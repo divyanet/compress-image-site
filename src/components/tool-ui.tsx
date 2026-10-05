@@ -5,7 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import { formatBytes, type ProcessedImage } from "@/lib/image";
 
 /* ------------------------------------------------------------------ */
-/* UploadDrop — big iLoveIMG-style dropzone                            */
+/* UploadDrop — iLovePDF-style upload area: gray zone + big red button  */
 /* ------------------------------------------------------------------ */
 
 interface UploadDropProps {
@@ -23,7 +23,7 @@ export function UploadDrop({
   multiple = false,
   onFiles,
   title = "Select images",
-  description = "or drag and drop your files here",
+  description = "or drop images here",
 }: UploadDropProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -82,36 +82,23 @@ export function UploadDrop({
           setDragging(false);
           handleFiles(e.dataTransfer.files);
         }}
-        className={`cursor-pointer rounded-[28px] border-[3px] border-dashed bg-white px-6 py-14 text-center transition-all sm:py-20 ${
-          dragging
-            ? "scale-[1.01] border-blue-600 bg-blue-50 shadow-xl shadow-blue-100"
-            : "border-slate-300 shadow-sm hover:border-blue-400 hover:shadow-md"
+        className={`cursor-pointer rounded-xl bg-[#f6f6f9] px-6 py-14 text-center transition-all sm:py-20 ${
+          dragging ? "bg-red-50 ring-2 ring-[#e5322d] ring-inset" : "hover:bg-[#efeff3]"
         }`}
       >
         <span
-          className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full shadow-lg transition-colors ${
-            dragging ? "bg-blue-700 shadow-blue-200" : "bg-blue-600 shadow-blue-600/25"
-          }`}
+          className="mx-auto inline-flex items-center justify-center rounded-lg bg-[#e5322d] px-10 py-4 text-lg font-bold text-white shadow-lg shadow-red-600/20 transition-colors hover:bg-[#c82823]"
           aria-hidden="true"
         >
-          <svg className="h-9 w-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
+          {title}
         </span>
-        <p className="mt-5 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">{title}</p>
-        <p className="mt-1.5 text-sm text-slate-500 sm:text-base">{description}</p>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          {formats && (
-            <span className="rounded-full bg-slate-100 px-3.5 py-1.5 text-xs font-semibold text-slate-600">
-              {formats}
-            </span>
-          )}
-          <span className="rounded-full bg-slate-100 px-3.5 py-1.5 text-xs font-semibold text-slate-600">
-            Max {maxSizeMB} MB
-          </span>
-          <span className="rounded-full bg-green-100 px-3.5 py-1.5 text-xs font-semibold text-green-700">
-            100% private
-          </span>
+        <p className="mt-4 text-[15px] font-medium text-gray-500">{description}</p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs font-semibold text-gray-400">
+          {formats && <span>{formats}</span>}
+          <span aria-hidden="true">·</span>
+          <span>Max {maxSizeMB} MB</span>
+          <span aria-hidden="true">·</span>
+          <span className="text-green-700">100% private</span>
         </div>
         <input
           ref={inputRef}
@@ -178,7 +165,7 @@ export function FileCard({ url, name, meta, onRemove }: FileCardProps) {
 }
 
 /* ------------------------------------------------------------------ */
-/* ActionButton — the one big CTA, iLoveIMG style                      */
+/* ActionButton — the one big CTA, iLovePDF red                       */
 /* ------------------------------------------------------------------ */
 
 interface ActionButtonProps {
@@ -195,7 +182,7 @@ export function ActionButton({ children, onClick, disabled, loading, type = "but
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className="inline-flex w-full items-center justify-center gap-2.5 rounded-2xl bg-blue-600 px-10 py-4 text-base font-bold text-white shadow-xl shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-700/25 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none sm:w-auto sm:min-w-72"
+      className="inline-flex w-full items-center justify-center gap-2.5 rounded-lg bg-[#e5322d] px-10 py-4 text-base font-bold text-white shadow-lg shadow-red-600/20 transition-colors hover:bg-[#c82823] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none sm:w-auto sm:min-w-72"
     >
       {loading ? (
         <>
@@ -349,7 +336,7 @@ export function ResultView({
           <a
             href={result.url}
             download={downloadName}
-            className="inline-flex flex-1 items-center justify-center gap-2.5 rounded-2xl bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-blue-600/25 transition-all hover:bg-blue-700 active:scale-[0.99] sm:flex-none sm:px-12"
+            className="inline-flex flex-1 items-center justify-center gap-2.5 rounded-lg bg-[#e5322d] px-8 py-4 text-base font-bold text-white shadow-lg shadow-red-600/20 transition-colors hover:bg-[#c82823] active:scale-[0.99] sm:flex-none sm:px-12"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -375,7 +362,7 @@ export function ResultView({
                 <Link
                   key={t.href}
                   href={t.href}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700 transition-colors hover:bg-blue-600 hover:text-white"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-4 py-2 text-sm font-bold text-[#e5322d] transition-colors hover:bg-[#e5322d] hover:text-white"
                 >
                   {t.label}
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
@@ -397,9 +384,9 @@ export function ResultView({
 
 export function ProcessingNote({ message }: { message: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-blue-50 px-5 py-4" role="status" aria-live="polite">
-      <span className="h-5 w-5 animate-spin rounded-full border-[3px] border-blue-600 border-t-transparent" aria-hidden="true" />
-      <p className="text-sm font-semibold text-blue-900">{message}</p>
+    <div className="flex items-center gap-3 rounded-xl bg-red-50 px-5 py-4" role="status" aria-live="polite">
+      <span className="h-5 w-5 animate-spin rounded-full border-[3px] border-[#e5322d] border-t-transparent" aria-hidden="true" />
+      <p className="text-sm font-semibold text-[#7a1a17]">{message}</p>
     </div>
   );
 }

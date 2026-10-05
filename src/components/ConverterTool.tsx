@@ -109,9 +109,9 @@ export function ConverterTool({ fromLabel, toFormat, toLabel, nextTools }: Props
         <div className="rounded-2xl border border-slate-200 bg-white p-5">
           <label htmlFor="cquality" className="flex items-center justify-between text-sm font-semibold text-slate-700">
             <span>{toLabel} quality</span>
-            <span className="rounded-lg bg-blue-50 px-2.5 py-1 text-sm font-bold text-blue-700">{quality}%</span>
+            <span className="rounded-lg bg-red-50 px-2.5 py-1 text-sm font-bold text-#c82823">{quality}%</span>
           </label>
-          <input id="cquality" type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="mt-3 w-full accent-blue-600" />
+          <input id="cquality" type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="mt-3 w-full accent-#e5322d" />
         </div>
       )}
 

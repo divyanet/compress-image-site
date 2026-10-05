@@ -133,7 +133,7 @@ export function ResizeTool({ pageName, presetLabel, presetW, presetH, nextTools 
       {!outcome && (
         <div className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4">
           {presetLabel && (
-            <p className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800">
+            <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-#7a1a17">
               Preset: {presetLabel} — adjust below if needed.
             </p>
           )}
@@ -169,7 +169,7 @@ export function ResizeTool({ pageName, presetLabel, presetW, presetH, nextTools 
             </label>
           )}
           <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-            <input type="checkbox" checked={lock} onChange={(e) => setLock(e.target.checked)} className="h-4 w-4 accent-blue-600" />
+            <input type="checkbox" checked={lock} onChange={(e) => setLock(e.target.checked)} className="h-4 w-4 accent-#e5322d" />
             Lock aspect ratio
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -183,7 +183,7 @@ export function ResizeTool({ pageName, presetLabel, presetW, presetH, nextTools 
             </label>
             <label className="block text-sm font-semibold text-slate-700">
               Quality ({quality}%)
-              <input type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="mt-3 w-full accent-blue-600" />
+              <input type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="mt-3 w-full accent-#e5322d" />
             </label>
           </div>
         </div>

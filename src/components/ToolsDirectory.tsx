@@ -7,7 +7,7 @@ import { PAGES, type PageDef } from "@/lib/slugs";
 type Tab = "all" | "compress" | "resize" | "convert" | "pdf";
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "all", label: "All tools" },
+  { id: "all", label: "All" },
   { id: "compress", label: "Compress" },
   { id: "resize", label: "Resize" },
   { id: "convert", label: "Convert" },
@@ -31,11 +31,11 @@ const FORMAT_LABELS: Record<string, string> = {
   svg: "SVG",
 };
 
-/* ---------- icons ---------- */
+/* ---------- icons (red, iLovePDF style) ---------- */
 
-function Icon({ d, className = "h-6 w-6" }: { d: string; className?: string }) {
+function Icon({ d, className = "h-7 w-7" }: { d: string; className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" d={d} />
     </svg>
   );
@@ -49,56 +49,38 @@ const ICONS = {
   image: "M4 16l4.5-4.5a1.5 1.5 0 012 0L16 17m-2-2l1.5-1.5a1.5 1.5 0 012 0L20 16M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z",
 };
 
-const TILE: Record<string, string> = {
-  compress: "bg-blue-100 text-blue-600",
-  resize: "bg-violet-100 text-violet-600",
-  convert: "bg-amber-100 text-amber-600",
-  pdf: "bg-red-100 text-red-600",
-  image: "bg-emerald-100 text-emerald-600",
-};
-
-/* ---------- pieces ---------- */
+/* ---------- iLovePDF-style tool card ---------- */
 
 function ToolCard({
   href,
   title,
   desc,
   icon,
-  tint,
   badge,
 }: {
   href: string;
   title: string;
   desc: string;
   icon: string;
-  tint: string;
   badge?: string;
 }) {
   return (
     <Link
       href={href}
-      className="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-600/10"
+      className="tool-card flex flex-col rounded-xl border border-[#e5e5ea] bg-white p-6"
     >
-      <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${TILE[tint]}`}>
+      <span className="flex h-12 w-12 items-center justify-center text-[#e5322d]" aria-hidden="true">
         <Icon d={icon} />
       </span>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-2">
-          <span className="truncate text-[15px] font-bold text-slate-900">{title}</span>
-          {badge && (
-            <span className="shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700">
-              {badge}
-            </span>
-          )}
-        </span>
-        <span className="mt-1 block text-[13px] leading-snug text-slate-500">{desc}</span>
-        <span className="mt-2 inline-flex items-center gap-1 text-[13px] font-bold text-blue-600">
-          Open tool
-          <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </span>
+      <span className="mt-3 flex items-center gap-2">
+        <span className="text-[17px] font-bold text-[#383e45]">{title}</span>
+        {badge && (
+          <span className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-[#e5322d]">
+            {badge}
+          </span>
+        )}
       </span>
+      <span className="mt-1.5 text-sm leading-relaxed text-gray-500">{desc}</span>
     </Link>
   );
 }
@@ -106,24 +88,24 @@ function ToolCard({
 function SizeAccordion({ label, pages, defaultOpen = false }: { label: string; pages: PageDef[]; defaultOpen?: boolean }) {
   if (pages.length === 0) return null;
   return (
-    <details className="tool-group rounded-2xl border border-slate-200 bg-white" open={defaultOpen || undefined}>
+    <details className="tool-group rounded-xl border border-[#e5e5ea] bg-white" open={defaultOpen || undefined}>
       <summary className="flex items-center justify-between gap-4 px-5 py-4">
         <span className="flex items-center gap-3">
-          <span className="text-[15px] font-bold text-slate-900">{label}</span>
-          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-500">
+          <span className="text-[15px] font-bold text-[#383e45]">{label}</span>
+          <span className="rounded-full bg-[#f6f6f9] px-2.5 py-0.5 text-xs font-bold text-gray-500">
             {pages.length}
           </span>
         </span>
-        <svg className="chev h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+        <svg className="chev h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
       </summary>
-      <div className="grid grid-cols-2 gap-2 border-t border-slate-100 p-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 border-t border-[#f0f0f3] p-4 sm:grid-cols-3 lg:grid-cols-4">
         {pages.map((p) => (
           <Link
             key={p.slug}
             href={`/${p.slug}/`}
-            className="flex min-h-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-center text-[13px] font-medium leading-snug text-slate-600 transition-colors hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700"
+            className="flex min-h-[44px] items-center justify-center rounded-lg border border-[#e5e5ea] bg-white px-3 py-2.5 text-center text-[13px] font-medium leading-snug text-[#383e45] transition-colors hover:border-[#e5322d] hover:text-[#e5322d]"
           >
             {p.name}
           </Link>
@@ -136,8 +118,8 @@ function SizeAccordion({ label, pages, defaultOpen = false }: { label: string; p
 /* ---------- main ---------- */
 
 const HUB_DESC: Record<string, string> = {
-  "compress-image": "Any image, any exact KB size",
-  "compress-jpeg": "Compress JPG photos, keep them sharp",
+  "compress-image": "Compress any image to an exact KB size",
+  "compress-jpeg": "Reduce JPG file size, keep quality high",
   "compress-jpg": "Same as JPEG — smaller JPG files",
   "compress-png": "Smaller PNGs, transparency kept",
   "compress-webp": "Modern format, tiny files",
@@ -146,12 +128,12 @@ const HUB_DESC: Record<string, string> = {
 };
 
 const CONV_DESC: Record<string, string> = {
-  "jpg-to-webp": "Modern tiny WebP output",
-  "avif-to-jpg": "Universal JPG from AVIF",
-  "heic-to-jpg": "iPhone photos to JPG",
-  "bmp-to-jpg": "Heavy BMPs to light JPG",
-  "tiff-to-jpg": "Scans and TIFFs to JPG",
-  "gif-to-jpg": "Still frame as JPG",
+  "jpg-to-webp": "Convert JPG images to WebP",
+  "avif-to-jpg": "Convert AVIF images to JPG",
+  "heic-to-jpg": "Convert iPhone HEIC photos to JPG",
+  "bmp-to-jpg": "Convert heavy BMPs to light JPG",
+  "tiff-to-jpg": "Convert TIFF scans to JPG",
+  "gif-to-jpg": "Convert GIF stills to JPG",
 };
 
 export function ToolsDirectory() {
@@ -169,7 +151,7 @@ export function ToolsDirectory() {
 
   return (
     <div>
-      {/* Tabs — iLoveIMG pattern */}
+      {/* Category pills */}
       <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Tool categories">
         {TABS.map((t) => (
           <button
@@ -177,10 +159,10 @@ export function ToolsDirectory() {
             role="tab"
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
-            className={`rounded-full px-5 py-2.5 text-sm font-bold transition-all ${
+            className={`rounded-full px-6 py-2.5 text-sm font-bold transition-colors ${
               tab === t.id
-                ? "bg-slate-900 text-white shadow-lg"
-                : "bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-slate-300"
+                ? "bg-[#e5322d] text-white"
+                : "bg-white text-[#383e45] ring-1 ring-[#e5e5ea] hover:ring-[#e5322d] hover:text-[#e5322d]"
             }`}
           >
             {t.label}
@@ -188,9 +170,9 @@ export function ToolsDirectory() {
         ))}
       </div>
 
-      <div className="mt-8 space-y-6">
+      <div className="mt-10 space-y-6">
         {show("compress") && (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {hubs.map((p) => (
               <ToolCard
                 key={p.slug}
@@ -198,7 +180,6 @@ export function ToolsDirectory() {
                 title={p.name}
                 desc={HUB_DESC[p.slug] ?? "Exact KB targets, free"}
                 icon={ICONS.compress}
-                tint="compress"
                 badge={`${sizesForHub(p.slug)} sizes`}
               />
             ))}
@@ -216,15 +197,14 @@ export function ToolsDirectory() {
 
         {show("resize") && (
           <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {resizePages.map((p) => (
                 <ToolCard
                   key={p.slug}
                   href={`/${p.slug}/`}
                   title={p.name}
-                  desc="Precise dimensions, kept sharp"
+                  desc="Resize to precise dimensions, kept sharp"
                   icon={ICONS.resize}
-                  tint="resize"
                 />
               ))}
             </div>
@@ -233,7 +213,7 @@ export function ToolsDirectory() {
         )}
 
         {show("convert") && (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {converters.map((p) => (
               <ToolCard
                 key={p.slug}
@@ -241,7 +221,6 @@ export function ToolsDirectory() {
                 title={p.name}
                 desc={CONV_DESC[p.slug] ?? "Fast format conversion"}
                 icon={ICONS.convert}
-                tint="convert"
               />
             ))}
           </div>
@@ -250,13 +229,12 @@ export function ToolsDirectory() {
         {show("pdf") && (
           <>
             {pdfHub && (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 <ToolCard
                   href={`/${pdfHub.slug}/`}
                   title={pdfHub.name}
                   desc="Compress PDFs to a target size"
                   icon={ICONS.pdf}
-                  tint="pdf"
                   badge={`${pdfSizes.length} sizes`}
                 />
               </div>

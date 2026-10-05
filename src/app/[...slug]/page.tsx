@@ -169,8 +169,8 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div>
-      <div className="dot-grid border-b border-slate-100 bg-gradient-to-b from-blue-50/70 via-white to-white">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+      <div className="border-b border-[#e5e5ea] bg-white">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <div className="pt-5">
             <Breadcrumbs
               trail={[
@@ -181,22 +181,19 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
             />
           </div>
 
-          {/* Tool-first hero */}
+          {/* Tool-first hero — iLovePDF style */}
           <section className="pb-10 pt-6 text-center">
-            <h1 className="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
+            <h1 className="text-3xl font-extrabold tracking-tight text-[#383e45] sm:text-4xl">
               {c.h1}
             </h1>
-            <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-slate-600">{c.intro}</p>
-            <div className="mt-6 rounded-[28px] border border-slate-200 bg-white p-4 text-left shadow-xl shadow-blue-600/5 md:p-6">
+            <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-gray-500">{c.intro}</p>
+            <div className="mt-8 rounded-xl bg-[#f6f6f9] p-4 text-left sm:p-6">
               <ToolWidget page={page} />
             </div>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[13px] font-medium text-gray-500">
               {["100% free", "No signup", "Private — no uploads"].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200"
-                >
-                  <svg className="h-3.5 w-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <span key={t} className="inline-flex items-center gap-1.5">
+                  <svg className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                   {t}
@@ -207,35 +204,33 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <AdSlot slot="tool-mid" />
 
         {/* Content body */}
         <div className="space-y-12 py-10">
           <section>
-            <h2 className="text-2xl font-black tracking-tight text-slate-900">{c.freeTitle}</h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.freeBody}</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#383e45]">{c.freeTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-gray-500">{c.freeBody}</p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-black tracking-tight text-slate-900">{c.whyTitle}</h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.whyBody}</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#383e45]">{c.whyTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-gray-500">{c.whyBody}</p>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {c.cards.map((card, i) => (
                 <div
                   key={card.title}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5"
+                  className="tool-card rounded-xl border border-[#e5e5ea] bg-white p-5"
                 >
                   <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-black text-white ${
-                      ["bg-blue-600", "bg-violet-600", "bg-emerald-600", "bg-amber-600", "bg-rose-600", "bg-cyan-600"][i % 6]
-                    }`}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-sm font-extrabold text-[#e5322d]"
                     aria-hidden="true"
                   >
                     {i + 1}
                   </span>
-                  <h3 className="mt-3 text-[15px] font-bold text-slate-900">{card.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
+                  <h3 className="mt-3 text-[15px] font-bold text-[#383e45]">{card.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-gray-500">
                     <RichText text={card.body} />
                   </p>
                 </div>
@@ -246,17 +241,17 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <AdSlot slot="tool-content" />
 
           <section>
-            <h2 className="text-2xl font-black tracking-tight text-slate-900">{c.howTitle}</h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.howIntro}</p>
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#383e45]">{c.howTitle}</h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-gray-500">{c.howIntro}</p>
             <ol className="mt-6 space-y-3">
               {c.steps.map((s, i) => (
-                <li key={s.title} className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">
+                <li key={s.title} className="flex gap-4 rounded-xl border border-[#e5e5ea] bg-white p-5">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e5322d] text-sm font-bold text-white">
                     {i + 1}
                   </span>
                   <div>
-                    <h3 className="text-[15px] font-bold text-slate-900">{s.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.body}</p>
+                    <h3 className="text-[15px] font-bold text-[#383e45]">{s.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-gray-500">{s.body}</p>
                   </div>
                 </li>
               ))}
@@ -264,7 +259,7 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           </section>
 
           <section>
-            <h2 className="text-2xl font-black tracking-tight text-slate-900">
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#383e45]">
               Frequently asked questions
             </h2>
             <div className="mt-6">
