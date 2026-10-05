@@ -427,6 +427,77 @@ export function contentFor(page: PageDef): PageContent {
   }
 }
 
+/**
+ * SEO title + meta description for every page.
+ * Structure: keyword-first titles (≤60 chars, brand suffix),
+ * benefit-led descriptions (~150-160 chars: keyword + what it does
+ * + trust words + CTA). One function keeps all 353 pages consistent.
+ */
+export function seoFor(page: PageDef): { seoTitle: string; seoDescription: string } {
+  const brand = "CompressImage";
+  const fmt = fmtLabel(page);
+  const tool = page.name;
+
+  if (page.kind === "pdf") {
+    const kb = page.targetKb;
+    if (kb) {
+      return {
+        seoTitle: `Compress PDF to ${kb}KB Online Free | ${brand}`,
+        seoDescription: `Compress PDF to ${kb}KB online free. Reduce your PDF file size toward ${kb}KB in your browser — no signup, 100% private, no watermark. Try now!`,
+      };
+    }
+    return {
+      seoTitle: `Compress PDF Online Free | ${brand}`,
+      seoDescription: `Compress PDF online free. Make PDF files smaller to any exact KB size in your browser — no signup, no watermark, 100% private. Try now!`,
+    };
+  }
+
+  if ((page.kind === "size" || page.kind === "reduce") && page.targetKb) {
+    const kb = page.targetKb;
+    const noun = fmt === "image" ? "image" : `${fmt} image`;
+    return {
+      seoTitle: `Compress ${fmt} to ${kb}KB Online Free | ${brand}`,
+      seoDescription: `Compress ${fmt} to ${kb}KB online free. Reduce your ${noun} to exactly ${kb}KB in your browser — no signup, no watermark, 100% private. Try now!`,
+    };
+  }
+
+  if (page.kind === "reduce") {
+    return {
+      seoTitle: `Reduce Image Size in KB Online Free | ${brand}`,
+      seoDescription: `Reduce image size in KB online free. Compress JPG, PNG, WebP or GIF to any exact KB target in your browser — no signup, no watermark. Try now!`,
+    };
+  }
+
+  if (page.kind === "hub") {
+    return {
+      seoTitle: `${tool} Online Free | ${brand}`,
+      seoDescription: `Free ${tool.toLowerCase()} tool online. Shrink ${fmt} files to any exact KB size in your browser — no uploads, no signup, no watermark. Start now!`,
+    };
+  }
+
+  if (page.kind === "resize") {
+    return {
+      seoTitle: `${tool} Online Free | ${brand}`,
+      seoDescription: `${tool} online free. Change image dimensions in seconds in your browser — precise control, no signup, no watermark. Resize now!`,
+    };
+  }
+
+  if (page.kind === "converter") {
+    const m = tool.match(/^(.*) to (.*)$/);
+    const from = m ? m[1] : "image";
+    const to = m ? m[2] : "image";
+    return {
+      seoTitle: `${tool} Converter Online Free | ${brand}`,
+      seoDescription: `Convert ${from} to ${to} online free. Turn ${from} images into ${to} in seconds in your browser — no signup, no watermark. Convert now!`,
+    };
+  }
+
+  return {
+    seoTitle: `${tool} Online Free | ${brand}`,
+    seoDescription: `Free ${tool.toLowerCase()} online. Compress images to any exact KB size in your browser — no signup, no watermark, 100% private. Try now!`,
+  };
+}
+
 /** Resolve a slug to its PageDef (for internal links). */
 export function pageForSlug(slug: string): PageDef | undefined {
   return PAGE_MAP[slug];

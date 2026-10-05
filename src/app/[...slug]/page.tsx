@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PAGE_MAP, PAGES, type PageDef } from "@/lib/slugs";
-import { contentFor } from "@/lib/content";
+import { contentFor, seoFor } from "@/lib/content";
 import { SITE, siteUrl } from "@/lib/site";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { AdSlot } from "@/components/AdSlot";
@@ -33,17 +33,18 @@ export async function generateMetadata({
   const page = getPage(slug);
   if (!page) return {};
   const c = contentFor(page);
+  const seo = seoFor(page);
   const url = siteUrl(`/${page.slug}/`);
   return {
-    title: c.h1,
-    description: c.intro,
+    title: { absolute: seo.seoTitle },
+    description: seo.seoDescription,
     alternates: { canonical: url },
     openGraph: {
       type: "website",
       url,
       siteName: SITE.name,
-      title: c.h1,
-      description: c.intro,
+      title: seo.seoTitle,
+      description: seo.seoDescription,
     },
     robots: { index: true, follow: true },
   };
@@ -243,16 +244,32 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
           <section>
             <h2 className="text-2xl font-extrabold tracking-tight text-[#383e45]">{c.howTitle}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-gray-500">{c.howIntro}</p>
-            <ol className="mt-6 space-y-3">
+            <ol className="mt-6 grid gap-4 md:grid-cols-3">
               {c.steps.map((s, i) => (
-                <li key={s.title} className="flex gap-4 rounded-xl border border-[#e5e5ea] bg-white p-5">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e5322d] text-sm font-bold text-white">
-                    {i + 1}
+                <li key={s.title} className="tool-card rounded-xl border border-[#e5e5ea] bg-white p-6 text-center">
+                  <span className="mx-auto flex h-12 w-12 items-center justify-center text-[#e5322d]" aria-hidden="true">
+                    <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d={
+                          [
+                            /* 1 — add your file: upload */
+                            "M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-3.375-9L12 3m0 0L7.625 7.5M12 3v13.5",
+                            /* 2 — pick target / compress: sliders */
+                            "M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75",
+                            /* 3 — download: download */
+                            "M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3",
+                          ][i % 3]
+                        }
+                      />
+                    </svg>
                   </span>
-                  <div>
-                    <h3 className="text-[15px] font-bold text-[#383e45]">{s.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-gray-500">{s.body}</p>
-                  </div>
+                  <p className="mt-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+                    Step {i + 1}
+                  </p>
+                  <h3 className="mt-1 text-[15px] font-bold text-[#383e45]">{s.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-gray-500">{s.body}</p>
                 </li>
               ))}
             </ol>

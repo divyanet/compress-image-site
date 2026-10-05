@@ -7,19 +7,19 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.domain),
   title: {
-    default: `${SITE.name} — Free Online Image Compressor`,
+    default: `Free Image Compressor — Compress Images Online | ${SITE.name}`,
     template: `%s | ${SITE.name}`,
   },
   description:
-    "Compress images online for free. Shrink JPG, PNG, WebP, GIF and SVG to any exact KB size — 100% in your browser, no uploads, no signup.",
+    "Free online image compressor. Compress JPG, PNG, WebP, GIF, SVG and PDF to any exact KB size in your browser — no signup, no watermark. Try now!",
   alternates: { canonical: siteUrl("/") },
   openGraph: {
     type: "website",
     url: siteUrl("/"),
     siteName: SITE.name,
-    title: `${SITE.name} — Free Online Image Compressor`,
+    title: `Free Image Compressor — Compress Images Online | ${SITE.name}`,
     description:
-      "Shrink images to any exact KB size. Free, private, no uploads — everything runs in your browser.",
+      "Compress images to any exact KB size. Free, private, no uploads — everything runs in your browser.",
   },
   robots: { index: true, follow: true },
 };
